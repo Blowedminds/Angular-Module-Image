@@ -1,0 +1,34 @@
+<mat-spinner *ngIf="!isPageReady" class="loading"></mat-spinner>
+
+<div class="cs-container" *ngIf="isPageReady">
+
+  <div class="row">
+    <h2>Public</h2>
+
+    <div class="image-col" *ngFor="let one of images.public">
+      <a [routerLink]="['/image', one.u_id]">
+        <p>{{one.name}}</p>
+          <img src="{{makeImageUrl(one.u_id)}}" [alt]="one.alt">
+      </a>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <h2>Private</h2>
+
+    <div class="image-col" *ngFor="let one of images.private">
+
+      <a [routerLink]="['/image', one.u_id]">
+        <p>{{one.name}}</p>
+        <img src="{{makeImageUrl(one.u_id)}}">
+      </a>
+    </div>
+  </div>
+
+
+  <button mat-fab class="add-btn" (click)="openImageUploader()">
+    <i class="fa fa-plus" aria-hidden="true"></i>
+  </button>
+
+</div>
