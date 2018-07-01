@@ -1,14 +1,15 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes }    from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { ImagesComponent } from './components/images/images.component';
 import { ImageEditComponent } from './components/image-edit/image-edit.component';
 
-const routes = [
-  { path: "", component: NavigationComponent, children: [
-      { path: "images", component: ImagesComponent },
-      { path: "image/:image", component: ImageEditComponent }
+const routes: Routes = [
+  {
+    path: '', component: NavigationComponent, children: [
+      { path: 'images', component: ImagesComponent },
+      { path: 'image/:image', component: ImageEditComponent }
     ]
   }
 ];
@@ -16,8 +17,10 @@ const routes = [
 @NgModule({
   imports: [
     RouterModule.forRoot(routes,
-      { enableTracing: false}
-  )],
+      {
+        enableTracing: false
+      }
+    )],
   exports: [
     RouterModule
   ]

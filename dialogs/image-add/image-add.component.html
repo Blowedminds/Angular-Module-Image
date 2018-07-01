@@ -10,17 +10,17 @@
 
     <form #f="ngForm" (ngSubmit)="uploadImage(f)">
 
-      <img src="" id="img">
+      <img src="" id="image">
 
-      <input type="file" #file style="display: none" (change)="showImage('img')" ngModel name="image">
+      <input type="file" #file style="display: none" (change)="showImage('image')" ngModel name="image">
 
-      <div class="form-group">
+      <div class="field">
 
-        <button mat-button (click)="file.click()" type="button">Resim Yükle</button>
+        <button mat-button (click)="file.click()" type="button" [disabled]="!!data">Resim Yükle</button>
 
       </div>
 
-      <div class="form-group" *ngIf="uploading">
+      <div class="field" *ngIf="uploading">
 
         <mat-progress-bar
           [mode]="mode"
@@ -29,26 +29,24 @@
 
       </div>
 
-      <div class="form-group">
+      <div class="field">
 
-        <mat-form-field class="form-group">
+        <mat-form-field>
           <input matInput type="text" placeholder="Resim İsmi" ngModel name="name">
         </mat-form-field>
 
       </div>
 
-      <div class="form-group">
+      <div class="field">
 
-        <mat-form-field class="form-group">
-          <input matInput type="text" placeholder="Resim Alt İsmi" ngModel name="alt" required>
+        <mat-form-field>
+          <input matInput type="text" placeholder="Resim Alt İsmi" ngModel name="alt">
         </mat-form-field>
 
       </div>
 
-      <div class="form-group">
-
-        <mat-checkbox ngModel name="public">Herkese Açık</mat-checkbox>
-
+      <div class="field">
+        <mat-checkbox ngModel name="public">Public</mat-checkbox>
       </div>
 
       <button type="submit" #submit style="display: none"></button>
