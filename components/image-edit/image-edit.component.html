@@ -152,9 +152,9 @@
             </mat-checkbox>
           </div>
 
-          <button #submit type="submit" style="display:none"></button>
-
-          <button mat-fab class="add-btn" color="primary" (click)="submit.click()" [disabled]="!f.valid">Kaydet</button>
+          <button mat-fab class="add-btn" type="submit" [disabled]="!f.valid">
+              <i class="fa fa-floppy-o is-size-4" aria-hidden="true"></i>
+          </button>
         </form>
       </mat-card>
 

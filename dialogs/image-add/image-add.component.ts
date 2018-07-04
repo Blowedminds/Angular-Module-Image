@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Inject } from 
 import { NgForm } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 
-import { HttpEventType, HttpResponse, HttpRequest } from '@angular/common/http';
+import { HttpEventType } from '@angular/common/http';
 
 import { ImageRequestService } from '../../services/image-request.service';
 
@@ -73,16 +73,20 @@ export class ImageAddComponent implements OnInit, AfterViewInit {
       public: f.value.public ? 1 : 0,
       alt: f.value.alt
     }, this.imageBlob || this.file.nativeElement.files.item(0)
-    ).subscribe(response => {
+    ).subscribe((response: any) => {
+      console.log(response, 0);
+      console.log(response.type === HttpEventType.UploadProgress, HttpEventType.UploadProgress, response.type, 0.2);
 
       this.uploading = true;
 
       if (response.type === HttpEventType.UploadProgress) {
         // This is an upload progress response. Compute and show the % done:
         const percentDone = Math.round(100 * response.loaded / response.total);
-
+        console.log(response, 1);
         this.length = percentDone;
-      } else if (response instanceof HttpResponse) {
+      } else if (response.type === HttpEventType.Response) {
+        console.log(response, 2);
+
         this.dialogRef.close(response.body.data.u_id);
 
         this.snackBar.open(response.body.message, response.body.action, {
@@ -91,6 +95,8 @@ export class ImageAddComponent implements OnInit, AfterViewInit {
 
         rq1.unsubscribe();
       }
+
+      console.log(response, 3);
     });
   }
 }

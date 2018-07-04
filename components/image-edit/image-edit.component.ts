@@ -138,6 +138,10 @@ export class ImageEditComponent implements OnInit {
       });
 
       const sub = dialogRef.afterClosed().subscribe((response) => {
+        if (!response) {
+          return;
+        }
+
         this.reloadView();
 
         this.helpersService.navigate(['/image/' + response]);
@@ -148,12 +152,11 @@ export class ImageEditComponent implements OnInit {
   }
 
   deleteImage() {
-    let rq2 = this.imageRequestService.deleteImage(this.image.u_id).subscribe(response => {
+    const rq2 = this.imageRequestService.deleteImage(this.image.u_id).subscribe(response => {
 
       this.helpersService.navigate(['images']);
 
       rq2.unsubscribe();
-      rq2 = null;
     });
   }
 

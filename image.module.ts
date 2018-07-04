@@ -8,10 +8,9 @@ import { ImageRoutingModule } from './image-routing.module';
 import { ImagesComponent } from './components/images/images.component';
 import { ImageEditComponent } from './components/image-edit/image-edit.component';
 import { ImageAddComponent } from './dialogs/image-add/image-add.component';
-import { ImageSaveAsComponent } from './dialogs/image-save-as/image-save-as.component';
-import { NavigationComponent } from './components/navigation/navigation.component'
+import { NavigationComponent } from './components/navigation/navigation.component';
 
-import { ImageRequestService } from './services/image-request.service'
+import { ImageRequestService } from './services/image-request.service';
 import { ImageService } from './services/image.service';
 
 @NgModule({
@@ -19,7 +18,6 @@ import { ImageService } from './services/image.service';
     ImagesComponent,
     ImageEditComponent,
     ImageAddComponent,
-    ImageSaveAsComponent,
     NavigationComponent
   ],
   imports: [
@@ -33,8 +31,7 @@ import { ImageService } from './services/image.service';
     ImageService
   ],
   entryComponents: [
-    ImageAddComponent,
-    ImageSaveAsComponent
+    ImageAddComponent
   ]
 })
 export class ImageModule { }
