@@ -27,7 +27,7 @@ export class ImagesComponent implements OnInit {
     private imageRequestService: ImageRequestService,
     private helpersService: HelpersService
   ) {
-    this.THUMB_IMAGE_URL = this.imageRequestService.makeUrl('image.thumb');
+    this.THUMB_IMAGE_URL = this.imageRequestService.makeUrl('storage.images.thumbs');
   }
 
   ngOnInit() {

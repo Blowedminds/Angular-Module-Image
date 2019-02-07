@@ -6,7 +6,7 @@
     <div class="column">
       <mat-card class="image">
         <div class="">
-          <img [src]="(image.u_id + '?token=' + getToken()) | url : imageRequestService.makeUrl('image.image')" alt="" id="img">
+          <img [src]="(image.u_id + '?token=' + getToken()) | url : IMAGE_URL" alt="" id="img">
         </div>
 
         <form #g="ngForm" (submit)="setData(g)" *ngIf="cropperInitialized">

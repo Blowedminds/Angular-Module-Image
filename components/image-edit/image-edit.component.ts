@@ -9,7 +9,7 @@ import { HelpersService } from '../../imports';
 
 import { ImageAddComponent } from '../../dialogs/image-add/image-add.component';
 
-declare var Cropper: any;
+import Cropper from 'cropperjs';
 
 @Component({
   selector: 'app-image-edit',
@@ -42,7 +42,7 @@ export class ImageEditComponent implements OnInit {
   ) {
     this.API_URL = this.imageRequestService.makeUrl('image');
 
-    this.IMAGE_URL = this.imageRequestService.makeUrl('image.image');
+    this.IMAGE_URL = this.imageRequestService.makeUrl('storage.images');
   }
 
   ngOnInit() {
@@ -64,7 +64,7 @@ export class ImageEditComponent implements OnInit {
       return;
     }
 
-    const element = document.getElementById(id);
+    const element = <HTMLImageElement> document.getElementById(id);
 
     this.cropper = new Cropper(element, {
       scalable: false,
