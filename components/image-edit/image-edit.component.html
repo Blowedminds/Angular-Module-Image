@@ -6,7 +6,7 @@
     <div class="column">
       <mat-card class="image">
         <div class="">
-          <img [src]="(image.u_id + '?token=' + getToken()) | url : IMAGE_URL" alt="" id="img">
+          <img [src]="(image.u_id + '?token=' + getToken()) | url : IMAGE_URL" alt="" id="img"/>
         </div>
 
         <form #g="ngForm" (submit)="setData(g)" *ngIf="cropperInitialized">
@@ -14,12 +14,12 @@
           <div class="field is-grouped">
             <div class="control">
               <mat-form-field>
-                <input matInput placeholder="X" name="x" type="number" [(ngModel)]="cropperData.x" (change)="setData(g)">
+                <input matInput placeholder="X" name="x" type="number" [(ngModel)]="cropperData.x" (change)="setData({'x': g.value.x})">
               </mat-form-field>
             </div>
             <div class="control">
-              <mat-form-field>
-                <input matInput placeholder="Y" name="y" type="number" [(ngModel)]="cropperData.y" (change)="setData(g)">
+            <mat-form-field>
+                <input matInput placeholder="Y" name="y" type="number" [(ngModel)]="cropperData.y" (change)="setData({'y': g.value.y})">
               </mat-form-field>
             </div>
           </div>
@@ -27,7 +27,7 @@
           <div class="field">
             <div class="control">
               <mat-form-field>
-                <input matInput placeholder="Rotate" name="rotate" [(ngModel)]="cropperData.rotate" (change)="setData(g)">
+                <input matInput placeholder="Rotate" name="rotate" type="number" [(ngModel)]="cropperData.rotate" (change)="setData({'rotate': g.value.rotate})">
               </mat-form-field>
             </div>
             <div class="control"></div>
@@ -36,11 +36,12 @@
           <div class="field is-grouped">
             <div class="control">
               <mat-slider placeholder="Width" [max]="image.width - cropperData.x" [thumbLabel]="1 == 1" [(ngModel)]="cropperData.width"
-                name="width" (change)="setData(g)">
+                name="width" (change)="setData({'width': g.value.width})">
               </mat-slider>
             </div>
             <div class="control">
-              <mat-slider [max]="image.height - cropperData.y" [thumbLabel]="1 == 1" [(ngModel)]="cropperData.height" name="height" (change)="setData(g)">
+              <mat-slider [max]="image.height - cropperData.y" [thumbLabel]="1 == 1" [(ngModel)]="cropperData.height" 
+              name="height" (change)="setData({'height': g.value.height})">
               </mat-slider>
             </div>
           </div>

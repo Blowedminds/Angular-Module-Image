@@ -1,21 +1,23 @@
-.gallery-images
-    display: flex
-    flex-wrap: wrap
+.card
+    background: #4e4d4d
+    .card-image figure
+        height: 128px
+        display: flex
+        justify-content: center
+        align-items: center
+        overflow: hidden
 
-    .gallery-image
-        margin: .2em .5em
+        img
+            max-width: 200%
+            height: 100%
+            width: auto
+    .card-content
+        padding: .5rem 1.5rem
+        background: #303030
 
-figure.image
-    display: flex
-    justify-content: center
-    align-items: center
-    margin: auto
-    position: relative
-
-    .image-text
-        position: absolute
-        bottom: 0
-        width: 100%
-        text-align: center
-        color: white
-        background: rgba(0, 0, 0, 0.8)
+@media(min-width: 768px) and (max-width:991px)
+    .card 
+        .card-image figure
+            height: 64px
+        .card-content
+            pad: .5rem 1rem

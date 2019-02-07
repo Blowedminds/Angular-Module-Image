@@ -6,13 +6,23 @@
   </div>
 
   <mat-card>
-    <div class="gallery-images">
-      <div class="gallery-image" *ngFor="let image of images.public">
+    <div class="columns is-multiline">
+      <div class="column is-2-desktop is-one-quarter-tablet" *ngFor="let image of images.public">
         <a [routerLink]="['/image', image.u_id]">
-          <figure class="image is-128x128">
-            <img [src]="makeImageUrl(image.u_id)" [alt]=image.alt>
-            <span class="image-text">{{image.name}}</span>
-          </figure>
+          <div class="card">
+            <div class="card-image">
+              <figure class="">
+                <img [src]="makeImageUrl(image.u_id)" [alt]=image.alt>
+              </figure>
+            </div>
+            <div class="card-content">
+              <div class="media">
+                <div class="media-content">
+                  <p class="title is-6">{{image.name}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </a>
       </div>
     </div>
@@ -22,13 +32,23 @@
     Private
   </div>
   <mat-card>
-    <div class="gallery-images">
-      <div class="gallery-image" *ngFor="let image of images.private">
-        <a [routerLink]="['/image', image.u_id]" class="image 128x128">
-          <figure class="image is-128x128">
-            <img [src]="makeImageUrl(image.u_id)" [alt]=image.alt>
-            <span class="image-text">{{image.name}}</span>
-          </figure>
+    <div class="columns is-multiline">
+      <div class="column is-2-desktop is-one-quarter-tablet" *ngFor="let image of images.private">
+        <a [routerLink]="['/image', image.u_id]">
+          <div class="card">
+            <div class="card-image">
+              <figure class="">
+                <img [src]="makeImageUrl(image.u_id)" [alt]=image.alt>
+              </figure>
+            </div>
+            <div class="card-content">
+              <div class="media">
+                <div class="media-content">
+                  <p class="title is-6">{{image.name}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </a>
       </div>
     </div>
