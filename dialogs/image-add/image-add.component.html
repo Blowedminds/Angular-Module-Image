@@ -2,7 +2,7 @@
 
   <div mat-dialog-title>
 
-    <h3 class="header-text">Resim Yükle</h3>
+    <h3 class="header-text" i18n="@@image-add-upload-image">Resim Yükle</h3>
 
   </div>
 
@@ -15,24 +15,18 @@
       <input type="file" #file style="display: none" (change)="showImage('image')" ngModel name="image">
 
       <div class="field">
-
-        <button mat-button (click)="file.click()" type="button" [disabled]="!!data">Resim Yükle</button>
-
+        <button mat-button (click)="file.click()" type="button" [disabled]="!!data" i18n="@@image-add-upload-image">Resim
+          Yükle</button>
       </div>
 
       <div class="field" *ngIf="uploading">
-
-        <mat-progress-bar
-          [mode]="mode"
-          [value]="length">
-      </mat-progress-bar>
-
+        <mat-progress-bar [mode]="mode" [value]="length"></mat-progress-bar>
       </div>
 
       <div class="field">
 
         <mat-form-field>
-          <input matInput type="text" placeholder="Resim İsmi" ngModel name="name">
+          <input matInput i18n-placeholder="@@image-add-image-name" type="text" placeholder="Resim İsmi" ngModel name="name" required>
         </mat-form-field>
 
       </div>
@@ -40,13 +34,13 @@
       <div class="field">
 
         <mat-form-field>
-          <input matInput type="text" placeholder="Resim Alt İsmi" ngModel name="alt">
+          <input matInput i18n-placeholder="@@image-add-image-alt" type="text" placeholder="Resim Alt İsmi" ngModel name="alt">
         </mat-form-field>
 
       </div>
 
       <div class="field">
-        <mat-checkbox ngModel name="public">Public</mat-checkbox>
+        <mat-checkbox ngModel name="public" i18n="@@image-public">Herkese Açık</mat-checkbox>
       </div>
 
       <button type="submit" #submit style="display: none"></button>
@@ -57,9 +51,9 @@
 
   <mat-dialog-actions>
 
-    <button mat-raised-button color="warn" mat-dialog-close>İptal</button>
+    <button mat-raised-button color="warn" mat-dialog-close i18n="@@cancel">İptal</button>
 
-    <button mat-raised-button (click)="submit.click()">Kaydet</button>
+    <button mat-raised-button (click)="submit.click()" i18n="@@save" [disabled]="!f.valid">Kaydet</button>
 
   </mat-dialog-actions>
 

@@ -1,183 +1,138 @@
 <mat-spinner *ngIf="!isPageReady" class="loading"></mat-spinner>
 
-<div class="" *ngIf="isPageReady">
-  <div class="columns">
+<div class="image-edit" *ngIf="isPageReady">
 
-    <div class="column">
-      <mat-card class="image">
-        <div class="">
-          <img [src]="(image.u_id + '?token=' + getToken()) | url : imageRequestService.makeUrl('image.image')" alt="" id="img">
-        </div>
-
-        <form #g="ngForm" (submit)="setData(g)" *ngIf="cropperInitialized">
-
-          <div class="field is-grouped">
-            <div class="control">
-              <mat-form-field>
-                <input matInput placeholder="X" name="x" type="number" [(ngModel)]="cropperData.x" (change)="setData(g)">
-              </mat-form-field>
-            </div>
-            <div class="control">
-              <mat-form-field>
-                <input matInput placeholder="Y" name="y" type="number" [(ngModel)]="cropperData.y" (change)="setData(g)">
-              </mat-form-field>
-            </div>
+  <div class="container">
+    <div class="columns">
+      <div class="column is-half">
+        <mat-card class="image">
+          <div class="">
+            <img [src]="(image.u_id + '?token=' + getToken()) | url : IMAGE_URL" alt="" id="img" />
           </div>
 
-          <div class="field">
-            <div class="control">
-              <mat-form-field>
-                <input matInput placeholder="Rotate" name="rotate" [(ngModel)]="cropperData.rotate" (change)="setData(g)">
-              </mat-form-field>
-            </div>
-            <div class="control"></div>
-          </div>
+          <form #g="ngForm" (submit)="setData(g)" *ngIf="cropperInitialized">
 
-          <div class="field is-grouped">
-            <div class="control">
-              <mat-slider placeholder="Width" [max]="image.width - cropperData.x" [thumbLabel]="1 == 1" [(ngModel)]="cropperData.width"
-                name="width" (change)="setData(g)">
-              </mat-slider>
-            </div>
-            <div class="control">
-              <mat-slider [max]="image.height - cropperData.y" [thumbLabel]="1 == 1" [(ngModel)]="cropperData.height" name="height" (change)="setData(g)">
-              </mat-slider>
-            </div>
-          </div>
-
-        </form>
-      </mat-card>
-
-      <mat-card>
-        <h1 class="title is-5 is-spaced">Fotoğraf Bilgileri</h1>
-
-        <div class="columns is-multiline">
-          <div class="column is-half">
-            <div class="level">
-              <div class="level-left">
-                <div class="level-item">
-                  Width
-                </div>
+            <div class="field is-grouped">
+              <div class="control">
+                <mat-form-field>
+                  <input matInput placeholder="X" name="x" type="number" [(ngModel)]="cropperData.x" (change)="setData({'x': g.value.x})">
+                </mat-form-field>
               </div>
-              <div class="level-right">
-                <div class="level-right">
-                  {{image.width}} px
-                </div>
+              <div class="control">
+                <mat-form-field>
+                  <input matInput placeholder="Y" name="y" type="number" [(ngModel)]="cropperData.y" (change)="setData({'y': g.value.y})">
+                </mat-form-field>
               </div>
             </div>
-          </div>
-          <div class="column is-half">
-            <div class="level">
-              <div class="level-left">
-                <div class="level-item">
-                  Height
-                </div>
+
+            <div class="field">
+              <div class="control">
+                <mat-form-field>
+                  <input matInput i18n-placeholder="@@image-rotate" placeholder="Döndürme" name="rotate" type="number"
+                    [(ngModel)]="cropperData.rotate" (change)="setData({'rotate': g.value.rotate})">
+                </mat-form-field>
               </div>
-              <div class="level-right">
-                <div class="level-right">
-                  {{image.height}} px
-                </div>
+              <div class="control"></div>
+            </div>
+
+            <div class="field is-grouped">
+              <div class="control">
+                <mat-slider i18n-placeholder="@@image-width" placeholder="Genişlik" [max]="image.width - cropperData.x"
+                  [thumbLabel]="1 == 1" [(ngModel)]="cropperData.width" name="width" (change)="setData({'width': g.value.width})">
+                </mat-slider>
+              </div>
+              <div class="control">
+                <mat-slider i18n-placeholder="@@image-height" placeholder="Yükseklik" [max]="image.height - cropperData.y"
+                  [thumbLabel]="1 == 1" [(ngModel)]="cropperData.height" name="height" (change)="setData({'height': g.value.height})">
+                </mat-slider>
               </div>
             </div>
-          </div>
-          <div class="column is-half">
-            <div class="level">
-              <div class="level-left">
-                <div class="level-item">
-                  Type
-                </div>
-              </div>
-              <div class="level-right">
-                <div class="level-right">
-                  {{image.type}}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="column is-half">
-            <div class="level">
-              <div class="level-left">
-                <div class="level-item">
-                  Size
-                </div>
-              </div>
-              <div class="level-right">
-                <div class="level-right">
-                  {{calcSize(image.size)}} KB
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="column">
-            <div class="level">
-              <div class="level-left">
-                <div class="level-item">
-                  Unique ID
-                </div>
-              </div>
-              <div class="level-right">
-                <div class="level-right">
-                  {{image.u_id}}
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-
-
-      </mat-card>
+          </form>
+        </mat-card>
+      </div>
+      <div class="column is-half">
+        <mat-card>
+          <h1 class="title is-size-5 is-spaced" i18n="@@photo-info">Fotoğraf Bilgileri</h1>
+          
+          <table class="table is-fullwidth">
+            <thead></thead>
+            <tfoot></tfoot>
+            <tbody>
+              <tr>
+                <td i18n="@@image-width">Genişlik</td>
+                <td>{{image.width}} px</td>
+              </tr>
+              <tr>
+                <td i18n="@@image-height">Yükseklik</td>
+                <td>{{image.height}} px</td>
+              </tr>
+              <tr>
+                <td i18n="@@image-type">Uzantı</td>
+                <td>{{image.type}}</td>
+              </tr>
+              <tr>
+                <td i18n="@@image-file-size">Dosya Boyutu</td>
+                <td>{{calcSize(image.size)}} KB</td>
+              </tr>
+              <tr>
+                <td i18n="@@image-uid">Eşsiz ID</td>
+                <td>{{image.u_id}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </mat-card>
+      </div>
     </div>
 
-    <div class="column">
-      <mat-card>
-        <form #f="ngForm" (ngSubmit)="postImage(f)">
-
-          <div class="field">
-            <mat-form-field>
-              <input matInput placeholder="Name" name="name" [(ngModel)]="image.name" required>
-            </mat-form-field>
-          </div>
-
-          <div class="field">
-            <mat-form-field>
-              <input matInput placeholder="Alt" name="alt" [(ngModel)]="image.alt" required>
-            </mat-form-field>
-          </div>
-
-          <div class="field">
-            <mat-checkbox name="public" [(ngModel)]="image.public">
-              Public
-            </mat-checkbox>
-          </div>
-
-          <button mat-fab class="add-btn" type="submit" [disabled]="!f.valid">
-            <mat-icon>save</mat-icon>
-          </button>
-        </form>
-      </mat-card>
-
-      <mat-card>
-        <div class="field is-grouped">
-          <div class="control">
-            <button mat-raised-button (click)="initialCropper('img')">{{cropperInitialized ? 'Destroy Cropper' : 'Initialize Cropper'}}</button>
-          </div>
+    <div class="columns">
+        <div class="column is-half">
+          <mat-card>
+            <form #f="ngForm" (ngSubmit)="postImage(f)">
+    
+              <div class="field">
+                <mat-form-field>
+                  <input matInput i18n-placeholder="@@image-name" placeholder="İsim" name="name" [(ngModel)]="image.name"
+                    required>
+                </mat-form-field>
+              </div>
+    
+              <div class="field">
+                <mat-form-field>
+                  <input matInput i18n-placeholder="@@image-alt" placeholder="Alt" name="alt" [(ngModel)]="image.alt"
+                    required>
+                </mat-form-field>
+              </div>
+    
+              <div class="field">
+                <mat-checkbox i18n="@@image-public" name="public" [(ngModel)]="image.public">Herkese Açık</mat-checkbox>
+              </div>
+    
+              <button mat-fab class="add-btn" type="submit" [disabled]="!f.valid">
+                <mat-icon>save</mat-icon>
+              </button>
+            </form>
+          </mat-card>
         </div>
-
-        <div class="field is-grouped">
-          <div class="control">
-            <button mat-raised-button (click)="putImage()" [disabled]="!cropperInitialized">Farklı Kaydet</button>
-          </div>
+        <div class="column is-half">
+          <mat-card>
+            <div class="columns">
+              <div class="column is-one-third">
+                <button mat-raised-button (click)="initialCropper('img')">
+                  <mat-icon>brush</mat-icon>
+                  <!-- {{ cropperInitialized ? "Kırpmayı İptal Et" : "Kırpmayı Aç" }} -->
+                </button>
+              </div>
+              <div class="column is-one-third">
+                <button mat-raised-button i18n="@@image-saveas" (click)="putImage()" [disabled]="!cropperInitialized">Farklı
+                  Kaydet</button>
+              </div>
+              <div class="column is-one-third">
+                <button mat-raised-button i18n="@@image-delete" color="warn" (click)="deleteImage()">Fotoğrafı Sil</button>
+    
+              </div>
+            </div>
+          </mat-card>
         </div>
-
-        <div class="field">
-          <div class="control">
-            <button mat-raised-button color="warn" (click)="deleteImage()">Fotoğrafı Sil</button>
-          </div>
-        </div>
-      </mat-card>
-    </div>
-
+      </div>
   </div>
 </div>

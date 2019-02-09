@@ -9,7 +9,8 @@ import { HelpersService } from '../../imports';
 
 import { ImageAddComponent } from '../../dialogs/image-add/image-add.component';
 
-declare var Cropper: any;
+import Cropper from 'cropperjs';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-image-edit',
@@ -152,12 +153,23 @@ export class ImageEditComponent implements OnInit {
   }
 
   deleteImage() {
-    const rq2 = this.imageRequestService.deleteImage(this.image.u_id).subscribe(response => {
+    swal.fire({
+      title: 'Fotoğrafı Sil',
+      type: 'info',
+      text: 'Bu işlem fotoğrafı silecektir',
+      confirmButtonText: 'Sil',
+      showCancelButton: true,
+    }).then((result) => {
+      if (result.value) {
+        const rq2 = this.imageRequestService.deleteImage(this.image.u_id).subscribe(response => {
 
-      this.helpersService.navigate(['images']);
+          this.helpersService.navigate(['images']);
 
-      rq2.unsubscribe();
+          rq2.unsubscribe();
+        });
+      }
     });
+
   }
 
   calcSize(size: number) {

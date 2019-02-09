@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { NavigationComponent } from './components/navigation/navigation.component';
 import { ImagesComponent } from './components/images/images.component';
 import { ImageEditComponent } from './components/image-edit/image-edit.component';
+import { NavigationComponent } from '../chat/imports';
 
 const routes: Routes = [
   {

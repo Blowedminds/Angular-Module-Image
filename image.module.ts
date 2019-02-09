@@ -1,30 +1,26 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { CoreModule } from '../core/core.module';
-import { SharedModule } from '../shared/shared.module';
 import { ImageRoutingModule } from './image-routing.module';
 
 import { ImagesComponent } from './components/images/images.component';
 import { ImageEditComponent } from './components/image-edit/image-edit.component';
 import { ImageAddComponent } from './dialogs/image-add/image-add.component';
-import { NavigationComponent } from './components/navigation/navigation.component';
 
 import { ImageRequestService } from './services/image-request.service';
 import { ImageService } from './services/image.service';
+import { NavigationModule } from '../navigation/navigation.module';
 
 @NgModule({
   declarations: [
     ImagesComponent,
     ImageEditComponent,
-    ImageAddComponent,
-    NavigationComponent
+    ImageAddComponent
   ],
   imports: [
     CommonModule,
     ImageRoutingModule,
-    SharedModule,
-    CoreModule
+    NavigationModule
   ],
   providers: [
     ImageRequestService,
