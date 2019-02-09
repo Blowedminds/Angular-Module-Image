@@ -43,7 +43,7 @@ export class ImageEditComponent implements OnInit {
   ) {
     this.API_URL = this.imageRequestService.makeUrl('image');
 
-    this.IMAGE_URL = this.imageRequestService.makeUrl('image.image');
+    this.IMAGE_URL = this.imageRequestService.makeUrl('storage.images');
   }
 
   ngOnInit() {
@@ -65,30 +65,24 @@ export class ImageEditComponent implements OnInit {
       return;
     }
 
-    const element = document.getElementById(id);
+    const element = <HTMLImageElement>document.getElementById(id);
 
     this.cropper = new Cropper(element, {
       scalable: false,
       zoomable: false,
       ready: () => this.cropperInitialized = true,
       crop: (e: any) => {
-        this.cropperData.x = parseInt(e.detail.x);
-        this.cropperData.y = parseInt(e.detail.y);
-        this.cropperData.width = parseInt(e.detail.width);
-        this.cropperData.height = parseInt(e.detail.height);
-        this.cropperData.rotate = parseInt(e.detail.rotate);
+        for (const key in this.cropperData) {
+          if (this.cropperData.hasOwnProperty(key)) {
+            this.cropperData[key] = e.detail[key].toFixed(0);
+          }
+        }
       }
     });
   }
 
-  setData(f: NgForm) {
-    this.cropper.setData({
-      x: parseInt(f.value.x),
-      y: parseInt(f.value.y),
-      width: parseInt(f.value.width),
-      height: parseInt(f.value.height),
-      rotate: parseInt(f.value.rotate),
-    });
+  setData(data: any) {
+    this.cropper.setData(data);
   }
 
   postImage(f: NgForm) {
