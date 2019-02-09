@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { ImagesComponent } from './components/images/images.component';
 import { ImageEditComponent } from './components/image-edit/image-edit.component';
-import { NavigationComponent } from '../chat/imports';
+import { NavigationComponent } from './imports';
 
 const routes: Routes = [
   {
