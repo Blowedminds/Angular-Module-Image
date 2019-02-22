@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { NgForm } from '@angular/forms';
@@ -11,13 +11,15 @@ import { ImageAddComponent } from '../../dialogs/image-add/image-add.component';
 
 import Cropper from 'cropperjs';
 import swal from 'sweetalert2';
+import { ImageService } from '../../services/image.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-image-edit',
   templateUrl: './image-edit.component.html',
   styleUrls: ['./image-edit.component.sass']
 })
-export class ImageEditComponent implements OnInit {
+export class ImageEditComponent implements OnInit, OnDestroy {
   image: any;
 
   API_URL: string;
@@ -30,6 +32,8 @@ export class ImageEditComponent implements OnInit {
 
   cropperData: any = { x: null, y: null, width: null, height: null, rotate: null };
 
+  subs = new Subscription;
+
   get isPageReady() {
     return !!this.image;
   }
@@ -38,19 +42,26 @@ export class ImageEditComponent implements OnInit {
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
     private route: ActivatedRoute,
-    private imageRequestService: ImageRequestService,
+    private requestService: ImageRequestService,
+    private service: ImageService,
     private helpersService: HelpersService,
   ) {
-    this.API_URL = this.imageRequestService.makeUrl('image');
+    this.API_URL = this.requestService.makeUrl('image');
 
-    this.IMAGE_URL = this.imageRequestService.makeUrl('storage.images');
+    this.IMAGE_URL = this.requestService.makeUrl('storage.images');
   }
 
   ngOnInit() {
-    this.route.params.pipe(switchMap((params: Params) => this.imageRequestService.getEdit(params['image'])))
-      .subscribe(response => {
-        this.image = response;
-      });
+    this.subs.add(
+      this.route.params.pipe(switchMap((params: Params) => this.requestService.getEdit(params['image'])))
+        .subscribe(response => {
+          this.image = response;
+        })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 
   getToken() {
@@ -111,15 +122,15 @@ export class ImageEditComponent implements OnInit {
       };
     }
 
-    const rq1 = this.imageRequestService.postImage(this.image.u_id, data).subscribe(response => {
-      this.snackBar.open(response.message, response.action, {
-        duration: 2000
-      });
+    this.subs.add(
+      this.requestService.postImage(this.image.u_id, data).subscribe(response => {
+        this.snackBar.open(response.message, response.action, {
+          duration: 2000
+        });
 
-      this.reloadView();
-
-      rq1.unsubscribe();
-    });
+        this.reloadView();
+      })
+    )
   }
 
   putImage() {
@@ -147,23 +158,12 @@ export class ImageEditComponent implements OnInit {
   }
 
   deleteImage() {
-    swal.fire({
-      title: 'Fotoğrafı Sil',
-      type: 'info',
-      text: 'Bu işlem fotoğrafı silecektir',
-      confirmButtonText: 'Sil',
-      showCancelButton: true,
-    }).then((result) => {
-      if (result.value) {
-        const rq2 = this.imageRequestService.deleteImage(this.image.u_id).subscribe(response => {
-
-          this.helpersService.navigate(['images']);
-
-          rq2.unsubscribe();
-        });
-      }
+    this.service.deleteAlert('Fotoğrafı Sil', () => {
+      this.subs.add(
+        this.requestService.deleteImage(this.image.u_id)
+          .subscribe(response => this.helpersService.navigate(['images']))
+      );
     });
-
   }
 
   calcSize(size: number) {
