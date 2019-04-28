@@ -25,7 +25,17 @@ image: {
     thumb: { url: 'thumb/' },
     images: { url: 'images/' },
     edit: { url: 'edit/' }
-}
+},
+storage: {
+    url: 'storage/',
+    images: {
+    url: 'images/',
+    thumbs: {
+        url: 'thumbs/'
+    }
+    }
+},
+
 `
 4. Import the cropperjs css files into angular.json file, eg.  
 `
