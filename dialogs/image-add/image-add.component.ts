@@ -19,7 +19,7 @@ export class ImageAddComponent implements OnInit, AfterViewInit {
 
   uploading = false;
 
-  @ViewChild('file') file: ElementRef;
+  @ViewChild('file', { static: true }) file: ElementRef;
 
   constructor(
     private imageRequestService: ImageRequestService,
