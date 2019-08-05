@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 
 import { ImageAddComponent } from '../../dialogs/image-add/image-add.component';
 
@@ -37,8 +37,8 @@ export class ImagesComponent implements OnInit, OnDestroy {
     this.subs.add(
       this.imageRequestService.getImages().subscribe(response => {
         this.images = response.reduce((result: any, image: any) => {
-          const index = image.public ? 'public' : 'private';
-          result[index].push(image);
+          const key = image.public ? 'public' : 'private';
+          result[key].push(image);
           return result;
         }, { public: [], private: [] });
       })
