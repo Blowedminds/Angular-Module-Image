@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material';
 
 import { ImageAddComponent } from '../../dialogs/image-add/image-add.component';
@@ -6,17 +6,20 @@ import { ImageAddComponent } from '../../dialogs/image-add/image-add.component';
 import { ImageRequestService } from '../../services/image-request.service';
 
 import { HelpersService } from '../../imports';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-images',
   templateUrl: './images.component.html',
   styleUrls: ['./images.component.sass']
 })
-export class ImagesComponent implements OnInit {
+export class ImagesComponent implements OnInit, OnDestroy {
 
   images: any;
 
   THUMB_IMAGE_URL: string;
+
+  subs = new Subscription();
 
   get isPageReady() {
     return !!this.images;
@@ -31,8 +34,19 @@ export class ImagesComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.subs.add(
+      this.imageRequestService.getImages().subscribe(response => {
+        this.images = response.reduce((result: any, image: any) => {
+          const index = image.public ? 'public' : 'private';
+          result[index].push(image);
+          return result;
+        }, { public: [], private: [] });
+      })
+    );
+  }
 
-    this.imageRequestService.getImages().subscribe(response => this.images = response);
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 
   makeImageUrl(image_id: string) {
@@ -44,21 +58,18 @@ export class ImagesComponent implements OnInit {
       disableClose: true
     });
 
-    let rq2 = dialogRef.afterClosed().subscribe(result => {
-      if (!result) {
-        return;
-      }
+    this.subs.add(
+      dialogRef.afterClosed().subscribe(result => {
+        if (!result) {
+          return;
+        }
 
-      this.images = null;
+        this.images = null;
 
-      let rq3 = this.imageRequestService.getImages().subscribe(response => {
-        this.images = response;
-        rq3.unsubscribe();
-        rq3 = null;
-      });
-
-      rq2.unsubscribe();
-      rq2 = null;
-    });
+        this.subs.add(
+          this.imageRequestService.getImages().subscribe(response => this.images = response)
+        );
+      })
+    )
   }
 }

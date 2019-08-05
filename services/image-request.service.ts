@@ -17,7 +17,7 @@ export class ImageRequestService extends MainRequestService {
     super(http, helpersService, routingListService);
   }
 
-  putImage(data: any, file: any): Observable<any> {
+  postImage(data: any, file: any): Observable<any> {
     const url = this.makeUrl('image.image', '?token=' + this.helpersService.getToken());
 
     const formData = new FormData();
@@ -57,11 +57,11 @@ export class ImageRequestService extends MainRequestService {
       .pipe(catchError(error => this.handleError(error)));
   }
 
-  postImage(u_id: string, data: any): Observable<any> {
+  putImage(u_id: string, data: any): Observable<any> {
     const url = this.makeUrl('image.edit', u_id);
 
     return this.http
-      .post(url, JSON.stringify(data), this.options)
+      .put(url, JSON.stringify(data), this.options)
       .pipe(catchError(error => this.handleError(error)));
   }
 

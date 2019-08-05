@@ -1,23 +1,26 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Inject } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Inject, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 
 import { HttpEventType } from '@angular/common/http';
 
 import { ImageRequestService } from '../../services/image-request.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-image-add',
   templateUrl: './image-add.component.html',
   styleUrls: ['./image-add.component.sass']
 })
-export class ImageAddComponent implements OnInit, AfterViewInit {
+export class ImageAddComponent implements OnInit, AfterViewInit, OnDestroy {
 
   imageBlob: Blob;
 
   length = 0;
 
   uploading = false;
+
+  subs = new Subscription();
 
   @ViewChild('file', { static: true }) file: ElementRef;
 
@@ -29,6 +32,10 @@ export class ImageAddComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -68,35 +75,29 @@ export class ImageAddComponent implements OnInit, AfterViewInit {
 
   uploadImage(f: NgForm) {
 
-    const rq1 = this.imageRequestService.putImage({
-      name: f.value.name,
-      public: f.value.public ? 1 : 0,
-      alt: f.value.alt
-    }, this.imageBlob || this.file.nativeElement.files.item(0)
-    ).subscribe((response: any) => {
-      console.log(response, 0);
-      console.log(response.type === HttpEventType.UploadProgress, HttpEventType.UploadProgress, response.type, 0.2);
+    this.subs.add(
+      this.imageRequestService.postImage({
+        name: f.value.name,
+        public: f.value.public ? 1 : 0,
+        alt: f.value.alt
+      }, this.imageBlob || this.file.nativeElement.files.item(0)
+      ).subscribe((response: any) => {
 
-      this.uploading = true;
+        this.uploading = true;
 
-      if (response.type === HttpEventType.UploadProgress) {
-        // This is an upload progress response. Compute and show the % done:
-        const percentDone = Math.round(100 * response.loaded / response.total);
-        console.log(response, 1);
-        this.length = percentDone;
-      } else if (response.type === HttpEventType.Response) {
-        console.log(response, 2);
+        if (response.type === HttpEventType.UploadProgress) {
+          // This is an upload progress response. Compute and show the % done:
+          const percentDone = Math.round(100 * response.loaded / response.total);
+          this.length = percentDone;
+        } else if (response.type === HttpEventType.Response) {
 
-        this.dialogRef.close(response.body.data.u_id);
+          this.dialogRef.close(true);
 
-        this.snackBar.open(response.body.message, response.body.action, {
-          duration: 2000
-        });
-
-        rq1.unsubscribe();
-      }
-
-      console.log(response, 3);
-    });
+          this.snackBar.open('Fotoğrafı albüme kaydettik', 'Tamam', {
+            duration: 2000
+          });
+        }
+      })
+    );
   }
 }

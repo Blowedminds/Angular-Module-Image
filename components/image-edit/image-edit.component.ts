@@ -123,7 +123,7 @@ export class ImageEditComponent implements OnInit, OnDestroy {
     }
 
     this.subs.add(
-      this.requestService.postImage(this.image.u_id, data).subscribe(response => {
+      this.requestService.putImage(this.image.u_id, data).subscribe(response => {
         this.snackBar.open(response.message, response.action, {
           duration: 2000
         });
