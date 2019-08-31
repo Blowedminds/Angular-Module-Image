@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient, HttpRequest } from '@angular/common/http';
-
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
 
 import { MainRequestService, HelpersService, RoutingListService } from '../imports';
 
@@ -18,58 +16,32 @@ export class ImageRequestService extends MainRequestService {
   }
 
   postImage(data: any, file: any): Observable<any> {
-    const url = this.makeUrl('image.image', '?token=' + this.helpersService.getToken());
-
     const formData = new FormData();
 
     formData.append('file', file);
 
     for (const prop in data) {
       if (data.hasOwnProperty(prop)) {
-
         formData.append(prop, data[prop]);
       }
     }
 
-    const req = new HttpRequest('POST', url, formData, {
-      reportProgress: true,
-      headers: new HttpHeaders({ 'enctype': 'multipart/form-data', 'X-Requested-With': 'XMLHttpRequest' })
-    });
-
-    return this.http
-      .request(req)
-      .pipe(catchError(error => this.handleError(error)));
+    return this.makePostRequestWithProgressReport('image.image', formData);
   }
 
   getImages(): Observable<any> {
-    const url = this.makeUrl('image.images');
-
-    return this.http
-      .get(url, this.options)
-      .pipe(catchError(error => this.handleError(error)));
+    return this.makeGetRequest('image.images');
   }
 
   getEdit(image: string): Observable<any> {
-    const url = this.makeUrl('image.edit', image);
-
-    return this.http
-      .get(url, this.options)
-      .pipe(catchError(error => this.handleError(error)));
+    return this.makeGetRequest('image.edit', image);
   }
 
   putImage(u_id: string, data: any): Observable<any> {
-    const url = this.makeUrl('image.edit', u_id);
-
-    return this.http
-      .put(url, JSON.stringify(data), this.options)
-      .pipe(catchError(error => this.handleError(error)));
+    return this.makePutRequest('image.edit', data, u_id);
   }
 
   deleteImage(u_id: string): Observable<any> {
-    const url = this.makeUrl('image.image', u_id);
-
-    return this.http
-      .delete(url, this.options)
-      .pipe(catchError(error => this.handleError(error)));
+    return this.makeDeleteRequest('image.image', u_id);
   }
 }

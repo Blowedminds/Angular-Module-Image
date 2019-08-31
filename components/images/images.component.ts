@@ -7,6 +7,7 @@ import { ImageRequestService } from '../../services/image-request.service';
 
 import { HelpersService } from '../../imports';
 import { Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-images',
@@ -35,13 +36,14 @@ export class ImagesComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subs.add(
-      this.imageRequestService.getImages().subscribe(response => {
-        this.images = response.reduce((result: any, image: any) => {
-          const key = image.public ? 'public' : 'private';
-          result[key].push(image);
-          return result;
-        }, { public: [], private: [] });
-      })
+      this.imageRequestService.getImages()
+        .pipe(
+          map(response => response.reduce(
+            (result: any, image: any) => this.partitionImages(result, image),
+            { public: [], private: [] })
+          )
+        )
+        .subscribe(response => this.images = response)
     );
   }
 
@@ -67,9 +69,24 @@ export class ImagesComponent implements OnInit, OnDestroy {
         this.images = null;
 
         this.subs.add(
-          this.imageRequestService.getImages().subscribe(response => this.images = response)
+          this.imageRequestService.getImages()
+            .pipe(
+              map(response => response.reduce(
+                (_result: any, image: any) => this.partitionImages(_result, image),
+                { public: [], private: [] })
+              )
+            )
+            .subscribe(response => this.images = response)
         );
       })
-    )
+    );
+  }
+
+  partitionImages(result: any, image: any) {
+    const key = image.public ? 'public' : 'private';
+
+    result[key].push(image);
+
+    return result;
   }
 }
